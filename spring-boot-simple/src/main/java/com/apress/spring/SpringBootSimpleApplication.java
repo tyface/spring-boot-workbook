@@ -1,41 +1,57 @@
 package com.apress.spring;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 
 @SpringBootApplication
 public class SpringBootSimpleApplication {
 
+	private static final Logger log = LoggerFactory.getLogger(SpringBootSimpleApplication.class);
+
 	public static void main(String[] args) throws IOException {
-		SpringApplication.run(SpringBootSimpleApplication.class,args);
+		SpringApplication.run(SpringBootSimpleApplication.class, args);
 	}
-}
 
-@Component
-class MyComponent {
-
-	private static final Logger log = LoggerFactory.getLogger(MyComponent.class);
+	@Bean
+	@Order(3)
+	String info() {
+		return "간단한 문자열 빈입니다.";
+	}
 
 	@Autowired
-	public MyComponent(ApplicationArguments args) {
-		boolean enable = args.containsOption("enable");
-		
-		//mvnw spring-boot:run -Dspring-boot.run.arguments="--enable"
-		if (enable)
-			log.info("## > enable 옵션을 주셨습니다.");
-		
-		List<String> _args = args.getNonOptionArgs();
-		log.info("## > 다른인자...");
-		if (!_args.isEmpty())_args.forEach(file -> log.info(file));
+	String info;
 
+	@Bean
+	@Order(2)
+	CommandLineRunner myMethod() {
+		return args -> {
+			log.info("## > 111 CommandLineRunner 구현체...");
+			log.info("info 빈에 액세스: " + info);
+			for(String arg:args)
+				log.info(arg);
+		};
+		
 	}
+	
+	@Bean
+	@Order(1)
+	CommandLineRunner myMethod2() {
+		return args -> {
+			log.info("## > 2222 CommandLineRunner 구현체...");
+			log.info("info 빈에 액세스: " + info);
+			for(String arg:args)
+				log.info(arg);
+		};
+		
+	}
+
 
 }
