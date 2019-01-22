@@ -16,12 +16,16 @@ public class SpringBootSimpleApplication {
 
 	private static final Logger log = LoggerFactory.getLogger(SpringBootSimpleApplication.class);
 
+	@Autowired
+	MyService svc;
+	
 	public static void main(String[] args) throws IOException {
 		SpringApplication.run(SpringBootSimpleApplication.class, args);
+		
+
 	}
 
 	@Bean
-	@Order(3)
 	String info() {
 		return "간단한 문자열 빈입니다.";
 	}
@@ -30,28 +34,15 @@ public class SpringBootSimpleApplication {
 	String info;
 
 	@Bean
-	@Order(2)
 	CommandLineRunner myMethod() {
 		return args -> {
 			log.info("## > 111 CommandLineRunner 구현체...");
 			log.info("info 빈에 액세스: " + info);
 			for(String arg:args)
 				log.info(arg);
+			log.info("=========server::" + svc.getServer());
 		};
 		
 	}
-	
-	@Bean
-	@Order(1)
-	CommandLineRunner myMethod2() {
-		return args -> {
-			log.info("## > 2222 CommandLineRunner 구현체...");
-			log.info("info 빈에 액세스: " + info);
-			for(String arg:args)
-				log.info(arg);
-		};
-		
-	}
-
 
 }
