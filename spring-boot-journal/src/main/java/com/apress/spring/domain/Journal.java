@@ -1,4 +1,4 @@
-package com.boot.ex.domain;
+package com.apress.spring.domain;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,25 +12,23 @@ import javax.persistence.Transient;
 
 @Entity
 public class Journal {
-
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	private String title;
 	private Date created;
 	private String summary;
-
+	
 	@Transient
-	private SimpleDateFormat format = new SimpleDateFormat("yyyy/dd/MM");
+	private SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyy");
 
-	public Journal(String title, String summary, String created) throws ParseException {
+	public Journal(String title, String summary, String date) throws ParseException{
 		this.title = title;
-		this.created = format.parse(created);
+		this.created = format.parse(date);
 		this.summary = summary;
 	}
-
-	public Journal() {
-	}
+	
+	Journal() {}
 
 	public Long getId() {
 		return id;
@@ -63,26 +61,25 @@ public class Journal {
 	public void setSummary(String summary) {
 		this.summary = summary;
 	}
-
+	
 	public String getCreatedAsShort() {
 		return format.format(created);
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Journal [id=");
 		builder.append(id);
-		builder.append(", title=");
+		builder.append(", 제목=");
 		builder.append(title);
-		builder.append(", created=");
-		builder.append(created);
-		builder.append(", summary=");
+		builder.append(", 요약=");
 		builder.append(summary);
-		builder.append(", format=");
-		builder.append(format);
+		builder.append(", 일자=");
+		builder.append(getCreatedAsShort());
 		builder.append("]");
 		return builder.toString();
 	}
-
+	
+	
 }
